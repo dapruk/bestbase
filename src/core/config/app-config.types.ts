@@ -5,7 +5,12 @@ export type AppEnvironment =
   | 'production'
   | string;
 
-export type AppRouterMode = 'tanstack' | 'react-router';
+export type AppRouterMode =
+  | 'uninitialized'
+  | 'tanstack'
+  | 'react-router-framework';
+
+export type AppRouterRenderingMode = 'spa' | 'server';
 
 export type AppAuthMode = 'cookie' | 'bearer' | 'hybrid';
 
@@ -31,8 +36,9 @@ export interface AppConfig {
   };
   router: {
     mode: AppRouterMode;
-    defaultLoginPath: string;
+    rendering: AppRouterRenderingMode;
     defaultAuthenticatedPath: string;
+    defaultPublicPath: string;
   };
   auth: {
     mode: AppAuthMode;
@@ -108,6 +114,7 @@ export interface AppConfig {
     debounceMs: number;
     defaultPageSize: number;
     enableUrlState: boolean;
+    mode: 'server' | 'client';
     pageSizeOptions: number[];
   };
   features: Record<string, boolean>;

@@ -7,9 +7,10 @@ export const defaultAppConfig: AppConfig = {
     environment: 'development',
   },
   router: {
-    mode: 'tanstack',
-    defaultLoginPath: '/login',
+    mode: 'uninitialized',
+    rendering: 'spa',
     defaultAuthenticatedPath: '/dashboard',
+    defaultPublicPath: '/login',
   },
   auth: {
     mode: 'cookie',
@@ -83,6 +84,7 @@ export const defaultAppConfig: AppConfig = {
     debounceMs: 300,
     defaultPageSize: 10,
     enableUrlState: false,
+    mode: 'server',
     pageSizeOptions: [10, 20, 50, 100],
   },
   features: {},

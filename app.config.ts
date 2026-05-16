@@ -7,9 +7,10 @@ const appConfig = {
     environment: import.meta.env.MODE,
   },
   router: {
-    mode: 'tanstack',
-    defaultLoginPath: '/login',
+    mode: 'uninitialized',
+    rendering: 'spa',
     defaultAuthenticatedPath: '/dashboard',
+    defaultPublicPath: '/login',
   },
   auth: {
     mode: 'cookie',
@@ -80,6 +81,7 @@ const appConfig = {
     },
   },
   dataTable: {
+    mode: 'server',
     defaultPageSize: 10,
     pageSizeOptions: [10, 20, 50, 100],
     enableUrlState: false,

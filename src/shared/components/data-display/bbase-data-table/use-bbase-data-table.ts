@@ -9,6 +9,7 @@ import {
 import { MoreHorizontal } from 'lucide-react';
 import { createElement } from 'react';
 
+import { resolveAppConfig } from '@/core/config/resolve-app-config';
 import { Button } from '@/shared/components/ui/button';
 
 import { BbaseDataTableActions } from './bbase-data-table.actions';
@@ -18,7 +19,7 @@ export function useBbaseDataTable<TRow, TValue = unknown>({
   columns,
   data,
   getRowId,
-  mode = 'server',
+  mode,
   onPaginationChange,
   onSortingChange,
   pageCount,
@@ -26,6 +27,7 @@ export function useBbaseDataTable<TRow, TValue = unknown>({
   rowActions = [],
   sorting,
 }: BbaseDataTableProps<TRow, TValue>) {
+  const tableMode = mode ?? resolveAppConfig().dataTable.mode;
   const tableColumns: ColumnDef<TRow, TValue | unknown>[] =
     rowActions.length > 0
       ? [
@@ -57,7 +59,7 @@ export function useBbaseDataTable<TRow, TValue = unknown>({
     columns: tableColumns,
     data,
     getCoreRowModel: getCoreRowModel(),
-    ...(mode === 'client'
+    ...(tableMode === 'client'
       ? {
           getFilteredRowModel: getFilteredRowModel(),
           getPaginationRowModel: getPaginationRowModel(),
@@ -65,9 +67,9 @@ export function useBbaseDataTable<TRow, TValue = unknown>({
         }
       : {}),
     ...(getRowId ? { getRowId } : {}),
-    manualFiltering: mode === 'server',
-    manualPagination: mode === 'server',
-    manualSorting: mode === 'server',
+    manualFiltering: tableMode === 'server',
+    manualPagination: tableMode === 'server',
+    manualSorting: tableMode === 'server',
     ...(onPaginationChange ? { onPaginationChange } : {}),
     ...(onSortingChange ? { onSortingChange } : {}),
     ...(pageCount === undefined ? {} : { pageCount }),

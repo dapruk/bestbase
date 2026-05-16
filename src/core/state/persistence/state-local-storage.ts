@@ -1,3 +1,4 @@
+import { createMemoryPersistenceAdapter } from './create-persisted-state';
 import type { StatePersistenceAdapter } from './state-persistence.types';
 import {
   deserializeState,
@@ -40,4 +41,6 @@ export function createWebStorageAdapter(
 }
 
 export const stateLocalStorage: StatePersistenceAdapter =
-  createWebStorageAdapter(window.localStorage);
+  typeof window === 'undefined'
+    ? createMemoryPersistenceAdapter()
+    : createWebStorageAdapter(window.localStorage);
