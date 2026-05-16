@@ -16,8 +16,8 @@ function getOption(args: string[], name: string): string | undefined {
 
 function printHelp() {
   logInfo(
-    `bestbase local CLI\n\nCommands:\n  npm run bbase -- gen feat {name}\n  npm run bbase -- gen component {name} --feature {feature}\n  npm run bbase -- gen store {name} --feature {feature}\n`
-      + `  npm run bbase -- init\n`
+    `bestbase local CLI\n\nCommands:\n  npm run bbase -- gen feat {name}\n  npm run bbase -- gen component {name} --feature {feature}\n  npm run bbase -- gen store {name} --feature {feature}\n` +
+      `  npm run bbase -- init\n`
   );
 }
 

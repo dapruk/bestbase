@@ -47,7 +47,10 @@ export async function initProject(options: InitOptions) {
     rendering: renderingMode,
   });
 
-  logSummary([configPath, ...files, ...dependencyFiles], Boolean(options.dryRun));
+  logSummary(
+    [configPath, ...files, ...dependencyFiles],
+    Boolean(options.dryRun)
+  );
   logInfo(`Router initialized: ${routerMode} (${renderingMode})`);
 }
 

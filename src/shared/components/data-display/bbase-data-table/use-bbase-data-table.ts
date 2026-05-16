@@ -55,6 +55,8 @@ export function useBbaseDataTable<TRow, TValue = unknown>({
         ]
       : columns;
 
+  // TanStack Table intentionally returns non-memoizable table APIs.
+  // eslint-disable-next-line react-hooks/incompatible-library
   return useReactTable({
     columns: tableColumns,
     data,

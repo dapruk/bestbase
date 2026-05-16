@@ -126,7 +126,12 @@ export function genFeature(options: GenFeatureOptions) {
         `import { createStore } from '@/core/rx/create-store';\nimport { createInitialTableState, resetTablePage } from '@/shared/components/data-display/bbase-data-table';\n\nimport type { ${featurePascal}ListState } from '../types/${featureName}.types';\n\nexport const ${featureCamel}ListStore = createStore<${featurePascal}ListState>(\n  createInitialTableState()\n);\n\nexport const ${featureCamel}ListActions = {\n  setSearch(search: string) {\n    ${featureCamel}ListStore.setState(\n      resetTablePage({ ...${featureCamel}ListStore.getSnapshot(), search })\n    );\n  },\n  setSorting(sorting: ${featurePascal}ListState['sorting']) {\n    ${featureCamel}ListStore.setState(\n      resetTablePage({ ...${featureCamel}ListStore.getSnapshot(), sorting })\n    );\n  },\n  setPagination(pagination: ${featurePascal}ListState['pagination']) {\n    ${featureCamel}ListStore.patchState({ pagination });\n  },\n};\n`,
       ],
       [
-        join(root, 'components', `${featureName}-table`, `${featureName}-table.columns.tsx`),
+        join(
+          root,
+          'components',
+          `${featureName}-table`,
+          `${featureName}-table.columns.tsx`
+        ),
         `import type { ColumnDef } from '@tanstack/react-table';\n\nimport type { ${featurePascal} } from '../../types/${featureName}.types';\n\nexport const ${featureCamel}TableColumns: ColumnDef<${featurePascal}>[] = [\n  {\n    accessorKey: 'id',\n    header: 'ID',\n  },\n  {\n    accessorKey: 'name',\n    header: 'Name',\n  },\n];\n`,
       ],
       [
@@ -197,7 +202,12 @@ function createFeatureRouteFiles({
   rendering: 'spa' | 'server';
   routePath: string;
 }): Array<[string, string]> {
-  const routeFile = join('src', 'router', 'generated', `${featureName}.route.tsx`);
+  const routeFile = join(
+    'src',
+    'router',
+    'generated',
+    `${featureName}.route.tsx`
+  );
   const pageImport = `@/features/${featureName}/pages/${featureName}-list.page`;
 
   if (mode === 'tanstack') {

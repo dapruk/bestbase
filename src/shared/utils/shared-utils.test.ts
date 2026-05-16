@@ -81,8 +81,9 @@ describe('shared utilities', () => {
 
   it('handles string, array, and object helpers', () => {
     expect(truncateText('abcdef', 5)).toBe('ab...');
-    expect(uniqueBy([{ id: 1 }, { id: 1 }, { id: 2 }], (item) => item.id))
-      .toHaveLength(2);
+    expect(
+      uniqueBy([{ id: 1 }, { id: 1 }, { id: 2 }], (item) => item.id)
+    ).toHaveLength(2);
     expect(compactArray([1, null, 2, false])).toEqual([1, 2]);
     expect(omitEmptyValues({ a: '', b: 0, c: false, d: null })).toEqual({
       b: 0,

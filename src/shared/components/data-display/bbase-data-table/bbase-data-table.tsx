@@ -54,7 +54,9 @@ export function BbaseDataTable<TRow, TValue = unknown>(
         </div>
       ) : null}
       <DiceDataTable table={table} />
-      {data.length === 0 ? <BbaseDataTableEmpty message={emptyMessage} /> : null}
+      {data.length === 0 ? (
+        <BbaseDataTableEmpty message={emptyMessage} />
+      ) : null}
     </div>
   );
 }

@@ -5,7 +5,9 @@ export function truncateText(value: string, maxLength: number, suffix = '...') {
 
 export function toTitleCase(value: string) {
   return words(value)
-    .map((word) => `${word.charAt(0).toUpperCase()}${word.slice(1).toLowerCase()}`)
+    .map(
+      (word) => `${word.charAt(0).toUpperCase()}${word.slice(1).toLowerCase()}`
+    )
     .join(' ');
 }
 

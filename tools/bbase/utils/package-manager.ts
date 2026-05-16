@@ -11,7 +11,7 @@ export function isDependencyInstalled(packageName: string) {
 
   return Boolean(
     packageJson.dependencies?.[packageName] ??
-      packageJson.devDependencies?.[packageName]
+    packageJson.devDependencies?.[packageName]
   );
 }
 

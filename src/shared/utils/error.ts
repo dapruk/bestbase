@@ -16,7 +16,10 @@ export function isErrorWithMessage(error: unknown): error is ErrorWithMessage {
   );
 }
 
-export function getErrorMessage(error: unknown, fallback = 'Something went wrong') {
+export function getErrorMessage(
+  error: unknown,
+  fallback = 'Something went wrong'
+) {
   if (isErrorWithMessage(error)) return error.message;
   if (typeof error === 'string' && error) return error;
 

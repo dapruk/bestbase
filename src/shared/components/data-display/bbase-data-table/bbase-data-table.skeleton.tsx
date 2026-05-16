@@ -4,7 +4,9 @@ interface BbaseDataTableSkeletonProps {
   columns: number;
 }
 
-export function BbaseDataTableSkeleton({ columns }: BbaseDataTableSkeletonProps) {
+export function BbaseDataTableSkeleton({
+  columns,
+}: BbaseDataTableSkeletonProps) {
   return (
     <div className="space-y-2 rounded-md border p-3">
       {Array.from({ length: 5 }).map((_, rowIndex) => (

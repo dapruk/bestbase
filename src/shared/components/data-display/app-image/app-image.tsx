@@ -35,8 +35,10 @@ export function AppImage({
   );
 }
 
-interface AppImageElementProps
-  extends Omit<AppImageProps, 'fallbackSrc' | 'src'> {
+interface AppImageElementProps extends Omit<
+  AppImageProps,
+  'fallbackSrc' | 'src'
+> {
   fallbackSrc: string;
   src: string;
 }

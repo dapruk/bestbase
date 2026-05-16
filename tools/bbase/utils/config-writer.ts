@@ -15,11 +15,11 @@ export function readRouterMode(path = 'app.config.ts'): RouterMode {
   return 'uninitialized';
 }
 
-export function readRouterRendering(path = 'app.config.ts'): RouterRenderingMode {
+export function readRouterRendering(
+  path = 'app.config.ts'
+): RouterRenderingMode {
   const content = readFileSync(path, 'utf8');
-  const match = content.match(
-    /router:\s*\{[\s\S]*?rendering:\s*'([^']+)'/u
-  );
+  const match = content.match(/router:\s*\{[\s\S]*?rendering:\s*'([^']+)'/u);
   return match?.[1] === 'server' ? 'server' : 'spa';
 }
 
@@ -34,10 +34,7 @@ export function writeRouterMode(
   const path = options.path ?? 'app.config.ts';
   const content = readFileSync(path, 'utf8');
   const nextContent = content
-    .replace(
-    /(router:\s*\{[\s\S]*?mode:\s*)'[^']+'/u,
-    `$1'${mode}'`
-    )
+    .replace(/(router:\s*\{[\s\S]*?mode:\s*)'[^']+'/u, `$1'${mode}'`)
     .replace(
       /(router:\s*\{[\s\S]*?rendering:\s*)'[^']+'/u,
       `$1'${options.rendering}'`
