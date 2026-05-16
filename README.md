@@ -74,9 +74,15 @@ Tailwind CSS dan shadcn/ui tersedia dari awal. Komponen shadcn ada di
 `src/shared/components/ui`, dengan style `radix-nova`, base color `neutral`, CSS
 variables aktif, dan `cn()` di `src/shared/utils/cn.ts`.
 
-Shared utilities tersedia di `src/shared/utils`, termasuk URL/image URL,
-currency/date/number/file-size formatting, device helpers, error helpers, dan
-string/array/object/async helpers. Lihat `docs/utilities.md`.
+## Utilities
+
+Common utilities live in `src/shared/utils`. `AppImage` lives in
+`src/shared/components/data-display/app-image`.
+
+Before creating a new helper, check `docs/utilities.md`. Future AI agents should
+reuse existing utilities instead of recreating them.
+
+See [docs/utilities.md](docs/utilities.md).
 
 `BbaseDataTable` adalah wrapper default untuk list office di
 `src/shared/components/data-display/bbase-data-table`. Wrapper ini memakai DiceUI

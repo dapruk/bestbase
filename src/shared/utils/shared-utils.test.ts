@@ -52,7 +52,7 @@ describe('shared utilities', () => {
   });
 
   it('formats currency and numbers', () => {
-    expect(formatCurrency(1000)).toContain('1.000');
+    expect(formatCurrency(1000000)).toBe('Rp1.000.000,-');
     expect(formatCurrency('bad')).toBe('-');
     expect(formatNumber(1000)).toBe('1.000');
   });

@@ -18,13 +18,27 @@ export function formatCurrency(
 
   if (amount === null) return fallback;
 
-  return new Intl.NumberFormat(options.locale ?? config.locale, {
-    currency: options.currency ?? config.currency,
-    maximumFractionDigits:
-      options.maximumFractionDigits ?? config.maximumFractionDigits,
+  const currency = options.currency ?? config.currency;
+  const locale = options.locale ?? config.locale;
+  const maximumFractionDigits =
+    options.maximumFractionDigits ?? config.maximumFractionDigits;
+  const minimumFractionDigits = options.minimumFractionDigits;
+  const formatted = new Intl.NumberFormat(locale, {
+    currency,
+    maximumFractionDigits,
     minimumFractionDigits: options.minimumFractionDigits,
     style: 'currency',
   }).format(amount);
+
+  if (
+    currency === 'IDR' &&
+    maximumFractionDigits === 0 &&
+    (minimumFractionDigits === undefined || minimumFractionDigits === 0)
+  ) {
+    return `${formatted.replace(/Rp\s+/u, 'Rp')},-`;
+  }
+
+  return formatted;
 }
 
 function toFiniteNumber(value: number | string | null | undefined) {
