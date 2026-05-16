@@ -1,8 +1,8 @@
 # Bestbase
 
 Bestbase adalah basecode frontend internal berbasis Vite, React, TypeScript, npm,
-TanStack Router, TanStack Query, RxJS, Zod, dan guardap. Fokus fase ini adalah
-fondasi reusable, bukan aplikasi contoh yang polished.
+TanStack Query, RxJS, Zod, dan guardap. Fokus fase ini adalah fondasi reusable,
+bukan aplikasi contoh yang polished.
 
 ## Menjalankan Project
 
@@ -50,6 +50,41 @@ menggunakan `.test.ts`; `.test.tsx` hanya untuk kasus render UI.
 itu langsung. Gunakan `resolveAppConfig()` agar default dan override selalu
 tergabung konsisten.
 
+## Router Initialization
+
+Basecode mulai tipis dengan `router.mode: 'uninitialized'`. Pilih router sekali
+melalui local CLI:
+
+```bash
+npm run bbase -- init
+```
+
+Command ini memilih TanStack Router atau React Router, mengubah
+`app.config.ts`, membuat file router dan guard adapter yang sesuai, memilih
+rendering mode, dan menginstal dependency router yang dipilih saja. App code
+tetap memakai public import stabil:
+
+```ts
+import { AppRouter } from '@/router';
+```
+
+Jangan mencampur TanStack Router dan React Router dalam satu project kecuali
+sedang melakukan custom architecture secara sengaja.
+
+Router mode:
+
+- TanStack Router
+- React Router Framework Mode
+
+Rendering mode:
+
+- SPA / Client-side only
+- Server-side capable / SSR-ready
+
+Server-side capable mode means base components/utilities avoid unsafe
+browser-only assumptions. Full SSR deployment may still need additional
+router/framework setup depending on hosting.
+
 ## Fetcher dan Query
 
 `baseFetcher` dipakai untuk endpoint auth/session yang tidak bergantung auth.
@@ -88,7 +123,10 @@ See [docs/utilities.md](docs/utilities.md).
 `src/shared/components/data-display/bbase-data-table`. Wrapper ini memakai DiceUI
 Data Table sebagai basis dan menjaga search, filter, sort, pagination, row
 actions, loading, empty, dan error state tetap controlled dari feature
-store/container. Raw DiceUI tetap tersedia sebagai escape hatch advanced.
+store/container. It reads `app.config.ts > dataTable.mode` by default
+(`server` for office/API-driven lists) and can be overridden per usage with
+`<BbaseDataTable mode="client" />`. Raw DiceUI tetap tersedia sebagai escape
+hatch advanced.
 
 List-view preset akan menjadi standar halaman list/detail/form:
 
@@ -102,6 +140,7 @@ Fase ini hanya menyediakan fondasi dan scaffold awal.
 ## Generator
 
 ```bash
+npm run bbase -- init
 npm run bbase -- gen feat product
 npm run bbase -- gen feat product --list-view
 npm run bbase -- gen component product-table --feature product
@@ -110,6 +149,8 @@ npm run bbase -- gen store product-list --feature product
 
 Opsi penting: `--dry-run`, `--force`, `--route`, `--protected`, `--public`,
 `--permission`, `--store`, `--service`, `--schema`, `--test`, `--persist`.
+`bbase gen` membaca `app.config.ts > router.mode`; route/list-view generation
+akan meminta `npm run bbase -- init` lebih dulu jika router belum diinisialisasi.
 
 ## Versioning dan PWA
 

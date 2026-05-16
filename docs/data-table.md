@@ -15,6 +15,28 @@ sorting, pagination, row actions, loading, empty, dan error state. Komponen ini
 tidak memanggil API, tidak membaca permission, dan tidak menyimpan business
 logic.
 
+Default mode dibaca dari `app.config.ts > dataTable.mode`.
+
+```ts
+dataTable: {
+  mode: 'server',
+}
+```
+
+`server` adalah default untuk office list pages: API/query dan feature store
+mengontrol filtering, sorting, dan pagination. `client` bisa dipakai untuk data
+kecil yang sudah loaded penuh.
+
+Per usage bisa override:
+
+```tsx
+<BbaseDataTable mode="client" />
+```
+
+Jangan campur dengan `router.rendering`. `router.rendering` mengatur SPA vs
+server-capable runtime behavior; `dataTable.mode` mengatur operasi data table
+server-side vs client-side.
+
 Pattern server-side list view:
 
 - state search/filter/sort/pagination hidup di feature store

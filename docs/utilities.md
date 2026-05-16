@@ -235,6 +235,10 @@ src/shared/hooks/use-is-mobile.ts
 for components. The default breakpoint comes from
 `app.config.ts > ui.breakpoints.mobile`.
 
+When `app.config.ts > router.rendering` is `server`, `useIsMobile` initializes
+conservatively and reads `window` only after mount. In SPA mode it still keeps a
+simple SSR-safe guard.
+
 ```ts
 isMobileViewport(375);
 ```

@@ -1,4 +1,4 @@
 # React Router Adapter
 
-Folder ini disiapkan untuk adapter React Router di fase berikutnya. Router
-default untuk basecode ini adalah TanStack Router.
+Folder ini diisi oleh `npm run bbase -- init` ketika project memilih React
+Router. Basecode tidak mengaktifkan React Router dan TanStack Router sekaligus.
