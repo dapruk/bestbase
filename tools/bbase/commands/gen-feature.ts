@@ -2,8 +2,9 @@ import { mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 
 import { toKebabCase, toPascalCase } from '../utils/casing';
+import { readRouterMode, readRouterRendering } from '../utils/config-writer';
 import { writeProjectFile } from '../utils/file-writer';
-import { logInfo, logSummary } from '../utils/logger';
+import { logError, logInfo, logSummary } from '../utils/logger';
 
 const FEATURE_DIRS = [
   'components',
@@ -41,6 +42,15 @@ export function genFeature(options: GenFeatureOptions) {
   const featureCamel = `${featurePascal.charAt(0).toLowerCase()}${featurePascal.slice(1)}`;
   const root = join('src', 'features', featureName);
   const files: string[] = [];
+  const needsRouter = Boolean(options.route || options.listView);
+  const routerMode = needsRouter ? readRouterMode() : 'uninitialized';
+  const routerRendering = needsRouter ? readRouterRendering() : 'spa';
+
+  if (needsRouter && routerMode === 'uninitialized') {
+    logError('Router is not initialized. Run: npm run bbase -- init first.');
+    process.exitCode = 1;
+    return;
+  }
 
   const writeFeatureFile = (path: string, content: string) => {
     if (
@@ -159,5 +169,58 @@ export function genFeature(options: GenFeatureOptions) {
     );
   }
 
+  if (needsRouter && routerMode !== 'uninitialized') {
+    const routeFiles = createFeatureRouteFiles({
+      featureName,
+      featurePascal,
+      mode: routerMode,
+      rendering: routerRendering,
+      routePath: options.routePath ?? `/${featureName}`,
+    });
+
+    routeFiles.forEach(([path, content]) => writeFeatureFile(path, content));
+  }
+
   logSummary(files, Boolean(options.dryRun));
+}
+
+function createFeatureRouteFiles({
+  featureName,
+  featurePascal,
+  mode,
+  rendering,
+  routePath,
+}: {
+  featureName: string;
+  featurePascal: string;
+  mode: 'tanstack' | 'react-router-framework';
+  rendering: 'spa' | 'server';
+  routePath: string;
+}): Array<[string, string]> {
+  const routeFile = join('src', 'router', 'generated', `${featureName}.route.tsx`);
+  const pageImport = `@/features/${featureName}/pages/${featureName}-list.page`;
+
+  if (mode === 'tanstack') {
+    return [
+      [
+        routeFile,
+        `import { createRoute, type AnyRoute } from '@tanstack/react-router';\n\nimport { ${featurePascal}ListPage } from '${pageImport}';\nimport type { AppRouteMeta } from '@/router/router.types';\n\nexport const ${featureName.replace(/-/g, '')}RouteMeta = {\n  login: true,\n} satisfies AppRouteMeta;\n\n// Generated for router.rendering = '${rendering}'. Keep browser-only behavior in hooks/effects when rendering is 'server'.\nexport function create${featurePascal}Route(parentRoute: AnyRoute) {\n  return createRoute({\n    getParentRoute: () => parentRoute,\n    path: '${routePath}',\n    component: ${featurePascal}ListPage,\n  });\n}\n`,
+      ],
+      [
+        join('src', 'router', 'generated', 'index.ts'),
+        `export * from './${featureName}.route';\n`,
+      ],
+    ];
+  }
+
+  return [
+    [
+      routeFile,
+      `import type { RouteObject } from 'react-router';\n\nimport { ${featurePascal}ListPage } from '${pageImport}';\nimport type { AppRouteMeta } from '@/router/router.types';\n\nexport const ${featureName.replace(/-/g, '')}RouteMeta = {\n  login: true,\n} satisfies AppRouteMeta;\n\n// Generated for router.rendering = '${rendering}'. Keep browser-only behavior in hooks/effects when rendering is 'server'.\nexport const ${featureName.replace(/-/g, '')}Route = {\n  path: '${routePath.replace(/^\//u, '')}',\n  element: <${featurePascal}ListPage />,\n} satisfies RouteObject;\n`,
+    ],
+    [
+      join('src', 'router', 'generated', 'index.ts'),
+      `export * from './${featureName}.route';\n`,
+    ],
+  ];
 }

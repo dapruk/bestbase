@@ -2,6 +2,7 @@
 import { genComponent } from './commands/gen-component';
 import { genFeature } from './commands/gen-feature';
 import { genStore } from './commands/gen-store';
+import { initProject } from './commands/init';
 import { logError, logInfo } from './utils/logger';
 
 function hasFlag(args: string[], flag: string): boolean {
@@ -16,6 +17,7 @@ function getOption(args: string[], name: string): string | undefined {
 function printHelp() {
   logInfo(
     `bestbase local CLI\n\nCommands:\n  npm run bbase -- gen feat {name}\n  npm run bbase -- gen component {name} --feature {feature}\n  npm run bbase -- gen store {name} --feature {feature}\n`
+      + `  npm run bbase -- init\n`
   );
 }
 
@@ -27,6 +29,20 @@ if (args.length === 0 || hasFlag(args, '--help')) {
 }
 
 const [scope, command, name] = args;
+
+if (scope === 'init') {
+  await initProject({
+    dryRun: hasFlag(args, '--dry-run'),
+    force: hasFlag(args, '--force'),
+    rendering: getOption(args, '--rendering') as 'spa' | 'server' | undefined,
+    router: getOption(args, '--router') as
+      | 'tanstack'
+      | 'react-router-framework'
+      | 'uninitialized'
+      | undefined,
+  });
+  process.exit(process.exitCode ?? 0);
+}
 
 if (scope !== 'gen' || !command || !name) {
   logError('Command tidak valid.');
