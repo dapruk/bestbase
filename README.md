@@ -59,15 +59,30 @@ cache data; server-state cache menjadi tanggung jawab TanStack Query.
 ## Auth dan Guardap
 
 Auth default adalah cookie-based session. Token sensitif tidak boleh disimpan di
-localStorage/sessionStorage. Integrasi guard memakai guardap `1.2.0` sebagai
-authorization engine; layer Bestbase hanya adapter tipis untuk route, component,
-dan action guard.
+localStorage/sessionStorage.
 
-## DataTable dan List View
+Guardap dikonfigurasi sekali di `src/core/guard/guard.config.ts` mengikuti API
+resmi `guardap@1.2.0`: `createGuard(config)`, role, group, condition, feature,
+action, login/guest, dan redirect. Gunakan `AccessGuard` dari
+`guardap/react` untuk conditional rendering dan fluent API `Guard` untuk direct
+checks. Bestbase tidak membuat wrapper `Can/useCan` atau authorization engine
+sendiri. Dokumentasi Guardap: https://www.npmjs.com/package/guardap
 
-DataTable adalah komponen controlled dan presentational. Search, filter, sort,
-pagination, API call, dan permission calculation dimiliki oleh feature
-store/container, bukan DataTable.
+## UI, Utilities, dan Data Table
+
+Tailwind CSS dan shadcn/ui tersedia dari awal. Komponen shadcn ada di
+`src/shared/components/ui`, dengan style `radix-nova`, base color `neutral`, CSS
+variables aktif, dan `cn()` di `src/shared/utils/cn.ts`.
+
+Shared utilities tersedia di `src/shared/utils`, termasuk URL/image URL,
+currency/date/number/file-size formatting, device helpers, error helpers, dan
+string/array/object/async helpers. Lihat `docs/utilities.md`.
+
+`BbaseDataTable` adalah wrapper default untuk list office di
+`src/shared/components/data-display/bbase-data-table`. Wrapper ini memakai DiceUI
+Data Table sebagai basis dan menjaga search, filter, sort, pagination, row
+actions, loading, empty, dan error state tetap controlled dari feature
+store/container. Raw DiceUI tetap tersedia sebagai escape hatch advanced.
 
 List-view preset akan menjadi standar halaman list/detail/form:
 
