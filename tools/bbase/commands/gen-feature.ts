@@ -93,11 +93,7 @@ export function genFeature(options: GenFeatureOptions) {
     const listViewFiles: Array<[string, string]> = [
       [
         join(root, 'types', `${featureName}.types.ts`),
-        `export interface ${featurePascal} {\n  id: string;\n}\n\nexport interface ${featurePascal}Filter {\n  search?: string;\n}\n`,
-      ],
-      [
-        join(root, 'constants', `${featureName}-permissions.constants.ts`),
-        `export const ${featureCamel}Permissions = {\n  read: '${featureName}:read',\n  create: '${featureName}:create',\n  update: '${featureName}:update',\n  delete: '${featureName}:delete',\n} as const;\n`,
+        `import type { BbaseDataTablePaginationState, BbaseDataTableSortingState } from '@/shared/components/data-display/bbase-data-table';\n\nexport interface ${featurePascal} {\n  id: string;\n  name?: string;\n}\n\nexport interface ${featurePascal}Filter {\n  limit?: number;\n  order?: string;\n  page?: number;\n  search?: string;\n  sort?: string;\n}\n\nexport interface ${featurePascal}ListState {\n  pagination: BbaseDataTablePaginationState;\n  search: string;\n  sorting: BbaseDataTableSortingState;\n}\n`,
       ],
       [
         join(root, 'schemas', `${featureName}.schema.ts`),
@@ -116,8 +112,16 @@ export function genFeature(options: GenFeatureOptions) {
         `import { api } from '@/core/http/fetcher';\n\nimport { ${featureCamel}ListSchema, ${featureCamel}Schema } from '../schemas/${featureName}.schema';\nimport type { ${featurePascal}Filter } from '../types/${featureName}.types';\n\nexport const ${featureCamel}Service = {\n  list: (params: ${featurePascal}Filter = {}) =>\n    api.get('/${featureName}', {\n      params,\n      responseSchema: ${featureCamel}ListSchema,\n    }),\n  detail: (id: string) =>\n    api.get(\`/${featureName}/\${id}\`, {\n      responseSchema: ${featureCamel}Schema,\n    }),\n};\n`,
       ],
       [
+        join(root, 'stores', `${featureName}-list.store.ts`),
+        `import { createStore } from '@/core/rx/create-store';\nimport { createInitialTableState, resetTablePage } from '@/shared/components/data-display/bbase-data-table';\n\nimport type { ${featurePascal}ListState } from '../types/${featureName}.types';\n\nexport const ${featureCamel}ListStore = createStore<${featurePascal}ListState>(\n  createInitialTableState()\n);\n\nexport const ${featureCamel}ListActions = {\n  setSearch(search: string) {\n    ${featureCamel}ListStore.setState(\n      resetTablePage({ ...${featureCamel}ListStore.getSnapshot(), search })\n    );\n  },\n  setSorting(sorting: ${featurePascal}ListState['sorting']) {\n    ${featureCamel}ListStore.setState(\n      resetTablePage({ ...${featureCamel}ListStore.getSnapshot(), sorting })\n    );\n  },\n  setPagination(pagination: ${featurePascal}ListState['pagination']) {\n    ${featureCamel}ListStore.patchState({ pagination });\n  },\n};\n`,
+      ],
+      [
+        join(root, 'components', `${featureName}-table`, `${featureName}-table.columns.tsx`),
+        `import type { ColumnDef } from '@tanstack/react-table';\n\nimport type { ${featurePascal} } from '../../types/${featureName}.types';\n\nexport const ${featureCamel}TableColumns: ColumnDef<${featurePascal}>[] = [\n  {\n    accessorKey: 'id',\n    header: 'ID',\n  },\n  {\n    accessorKey: 'name',\n    header: 'Name',\n  },\n];\n`,
+      ],
+      [
         join(root, 'containers', `${featureName}-list.container.tsx`),
-        `export function ${featurePascal}ListContainer() {\n  return <div>${featurePascal} list container</div>;\n}\n`,
+        `import { useQuery } from '@tanstack/react-query';\n\nimport { useObservableState } from '@/core/rx/use-observable-state';\nimport { BbaseDataTable, toApiPaginationParams, toApiSortingParams } from '@/shared/components/data-display/bbase-data-table';\n\nimport { ${featureCamel}TableColumns } from '../components/${featureName}-table/${featureName}-table.columns';\nimport { ${featureCamel}Service } from '../services/${featureName}.service';\nimport { ${featureCamel}ListActions, ${featureCamel}ListStore } from '../stores/${featureName}-list.store';\n\nexport function ${featurePascal}ListContainer() {\n  const state = useObservableState(${featureCamel}ListStore);\n  const params = {\n    search: state.search,\n    ...toApiPaginationParams(state.pagination),\n    ...toApiSortingParams(state.sorting),\n  };\n  const query = useQuery({\n    queryKey: ['${featureName}', 'list', params],\n    queryFn: () => ${featureCamel}Service.list(params),\n  });\n\n  return (\n    <BbaseDataTable\n      columns={${featureCamel}TableColumns}\n      data={query.data ?? []}\n      error={query.error}\n      loading={query.isLoading}\n      pageCount={-1}\n      pagination={state.pagination}\n      search={{\n        value: state.search,\n        placeholder: 'Search...',\n        onChange: ${featureCamel}ListActions.setSearch,\n      }}\n      sorting={state.sorting}\n      onPaginationChange={(updater) => {\n        const next = typeof updater === 'function' ? updater(state.pagination) : updater;\n        ${featureCamel}ListActions.setPagination(next);\n      }}\n      onSortingChange={(updater) => {\n        const next = typeof updater === 'function' ? updater(state.sorting) : updater;\n        ${featureCamel}ListActions.setSorting(next);\n      }}\n    />\n  );\n}\n`,
       ],
       [
         join(root, 'containers', `${featureName}-detail.container.tsx`),
@@ -142,6 +146,10 @@ export function genFeature(options: GenFeatureOptions) {
       [
         join(root, 'utils', `${featureName}.mapper.ts`),
         `import type { ${featurePascal} } from '../types/${featureName}.types';\n\nexport function map${featurePascal}(value: ${featurePascal}): ${featurePascal} {\n  return value;\n}\n`,
+      ],
+      [
+        join(root, 'stores', `${featureName}-list.store.test.ts`),
+        `import { describe, expect, it } from 'vitest';\n\nimport { ${featureCamel}ListActions, ${featureCamel}ListStore } from './${featureName}-list.store';\n\ndescribe('${featureName} list store', () => {\n  it('resets page when search changes', () => {\n    ${featureCamel}ListActions.setPagination({ pageIndex: 2, pageSize: 10 });\n    ${featureCamel}ListActions.setSearch('keyword');\n\n    expect(${featureCamel}ListStore.getSnapshot().pagination.pageIndex).toBe(0);\n    expect(${featureCamel}ListStore.getSnapshot().search).toBe('keyword');\n  });\n});\n`,
       ],
     ];
 
