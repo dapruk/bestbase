@@ -63,7 +63,27 @@ export const defaultAppConfig: AppConfig = {
     },
   },
   ui: {
+    breakpoints: {
+      mobile: 768,
+    },
     defaultPageSize: 10,
+  },
+  assets: {
+    fallbackImageUrl: '/images/fallback-image.png',
+    imageBaseUrl: '',
+  },
+  format: {
+    currency: {
+      currency: 'IDR',
+      locale: 'id-ID',
+      maximumFractionDigits: 0,
+    },
+  },
+  dataTable: {
+    debounceMs: 300,
+    defaultPageSize: 10,
+    enableUrlState: false,
+    pageSizeOptions: [10, 20, 50, 100],
   },
   features: {},
 };

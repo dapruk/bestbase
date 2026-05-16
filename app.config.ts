@@ -63,7 +63,27 @@ const appConfig = {
     },
   },
   ui: {
+    breakpoints: {
+      mobile: 768,
+    },
     defaultPageSize: 10,
+  },
+  assets: {
+    imageBaseUrl: import.meta.env.VITE_IMAGE_BASE_URL ?? '',
+    fallbackImageUrl: '/images/fallback-image.png',
+  },
+  format: {
+    currency: {
+      locale: 'id-ID',
+      currency: 'IDR',
+      maximumFractionDigits: 0,
+    },
+  },
+  dataTable: {
+    defaultPageSize: 10,
+    pageSizeOptions: [10, 20, 50, 100],
+    enableUrlState: false,
+    debounceMs: 300,
   },
   features: {},
 } satisfies AppConfig;

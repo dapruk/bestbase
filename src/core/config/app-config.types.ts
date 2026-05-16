@@ -88,7 +88,27 @@ export interface AppConfig {
     };
   };
   ui: {
+    breakpoints: {
+      mobile: number;
+    };
     defaultPageSize: number;
+  };
+  assets: {
+    fallbackImageUrl: string;
+    imageBaseUrl: string;
+  };
+  format: {
+    currency: {
+      currency: string;
+      locale: string;
+      maximumFractionDigits: number;
+    };
+  };
+  dataTable: {
+    debounceMs: number;
+    defaultPageSize: number;
+    enableUrlState: boolean;
+    pageSizeOptions: number[];
   };
   features: Record<string, boolean>;
 }
