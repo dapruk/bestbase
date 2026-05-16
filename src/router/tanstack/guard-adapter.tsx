@@ -1,4 +1,4 @@
-import { RouteGuard } from '@/core/guard/RouteGuard';
+import { RouteGuard } from '@/core/guard/route-guard';
 import type { AppRouteMeta } from '@/router/router.types';
 
 interface GuardedRouteProps {

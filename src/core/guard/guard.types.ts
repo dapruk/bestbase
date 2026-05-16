@@ -1,20 +1,37 @@
 import type { GuardapRouteMeta } from 'guardap';
 
-import type {
-  AppGuardAction,
-  AppGuardCondition,
-  AppGuardFeature,
-  AppGuardGroup,
-  AppGuardRole,
-} from './guard.config';
+export type AppRole = 'superadmin' | 'admin' | 'staff' | 'viewer';
 
-export interface AppGuardRouteMeta extends GuardapRouteMeta<
-  AppGuardRole,
-  AppGuardFeature,
-  AppGuardAction,
-  AppGuardCondition,
-  AppGuardGroup,
-  string
-> {
+export type AppFeature = 'dashboard' | 'products' | 'settings';
+
+export type AppAction =
+  | 'create'
+  | 'read'
+  | 'update'
+  | 'delete'
+  | 'archive'
+  | 'approve';
+
+export type AppCondition = 'active' | 'verified';
+
+export type AppGroup = 'management' | 'staff';
+
+export type AppRoutePath =
+  | '/'
+  | '/login'
+  | '/dashboard'
+  | '/product'
+  | '/product/create'
+  | '/forbidden'
+  | '/not-found';
+
+export type AppGuardMeta = GuardapRouteMeta<
+  AppRole,
+  AppFeature,
+  AppAction,
+  AppCondition,
+  AppGroup,
+  AppRoutePath
+> & {
   public?: boolean | undefined;
-}
+};
