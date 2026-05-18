@@ -27,6 +27,27 @@ const appConfig = {
     mode: 'mild',
     reloadOnChange: false,
     preserveLocalStorageKeys: ['bestbase:app-version'],
+    localSuffix: '-local',
+    remote: {
+      enabled: false,
+      url: '/version.json',
+      cacheBustParam: 't',
+      timeoutMs: 5000,
+    },
+    reload: {
+      queryKey: '__app_reload',
+      sessionKey: 'bestbase:app-version-reload-attempt',
+      maxAttempts: 1,
+    },
+    watch: {
+      enabled: true,
+      events: ['pageshow', 'visibilitychange', 'focus', 'online'],
+    },
+  },
+  runtime: {
+    console: {
+      suppressInProduction: true,
+    },
   },
   pwa: {
     enabled: false,

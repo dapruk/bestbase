@@ -9,6 +9,8 @@ export function resolveAppConfig(): AppConfig {
     return resolvedConfig;
   }
 
+  const configuredVersioning = appConfig.versioning as AppConfig['versioning'];
+
   resolvedConfig = {
     ...defaultAppConfig,
     ...appConfig,
@@ -44,7 +46,32 @@ export function resolveAppConfig(): AppConfig {
       },
     },
     ui: { ...defaultAppConfig.ui, ...appConfig.ui },
-    versioning: { ...defaultAppConfig.versioning, ...appConfig.versioning },
+    runtime: {
+      console: {
+        ...defaultAppConfig.runtime.console,
+        ...appConfig.runtime.console,
+      },
+    },
+    versioning: {
+      ...defaultAppConfig.versioning,
+      ...appConfig.versioning,
+      cleanupHooks: {
+        ...defaultAppConfig.versioning.cleanupHooks,
+        ...configuredVersioning.cleanupHooks,
+      },
+      reload: {
+        ...defaultAppConfig.versioning.reload,
+        ...appConfig.versioning.reload,
+      },
+      remote: {
+        ...defaultAppConfig.versioning.remote,
+        ...appConfig.versioning.remote,
+      },
+      watch: {
+        ...defaultAppConfig.versioning.watch,
+        ...appConfig.versioning.watch,
+      },
+    },
     features: { ...defaultAppConfig.features, ...appConfig.features },
   };
 
