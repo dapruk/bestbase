@@ -8,6 +8,7 @@
     "npm": ">=10"
   },
   "scripts": {
+    "predev": "npm run version:generate -- --local",
     "dev": "vite",
     "build": "tsc -b && vite build",
     "preview": "vite preview",
@@ -20,6 +21,7 @@
     "test:unit": "vitest run",
     "test:coverage": "vitest run --coverage",
     "check": "npm run typecheck && npm run lint && npm run format:check && npm run test:unit",
+    "version:generate": "tsx tools/version/generate-version.ts",
     "bbase": "tsx tools/bbase/index.ts"
   },
   "dependencies": {

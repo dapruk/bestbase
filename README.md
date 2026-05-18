@@ -50,6 +50,20 @@ menggunakan `.test.ts`; `.test.tsx` hanya untuk kasus render UI.
 `app.config.ts` adalah pusat konfigurasi app. Runtime harus membaca config
 melalui `resolveAppConfig()`, bukan import langsung ke banyak tempat.
 
+Version runtime diambil dari `VITE_APP_VERSION`, lalu fallback ke
+`app.config.ts > app.version`. Pada local development, Bestbase menambahkan
+suffix `-local` sekali saja, misalnya `0.1.0-local`.
+
+Generate file versi deploy dengan:
+
+```bash
+npm run version:generate
+npm run version:generate -- --local
+```
+
+`npm run dev` otomatis menjalankan `predev`, jadi `public/version.json`
+di-generate ulang dengan suffix lokal seperti `0.1.0-local`.
+
 ## Fetcher dan Query
 
 `baseFetcher` dipakai untuk endpoint tanpa dependency auth. `appFetcher` atau

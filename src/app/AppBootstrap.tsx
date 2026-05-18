@@ -5,7 +5,11 @@ import { configureFetcher } from '@/core/http/fetcher';
 import { initializePwaManager } from '@/core/pwa/pwa.manager';
 import type { PwaManagerState } from '@/core/pwa/pwa.types';
 import { PwaUpdatePrompt } from '@/core/pwa/PwaUpdatePrompt';
-import { initializeAppVersion } from '@/core/version/app-version.manager';
+import { configureConsole } from '@/core/runtime/console.manager';
+import {
+  checkAppVersionOnce,
+  watchAppVersion,
+} from '@/core/version/app-version.manager';
 import { LoadingState } from '@/shared/components/feedback/loading-state';
 
 interface AppBootstrapProps {
@@ -21,17 +25,25 @@ export function AppBootstrap({ children }: AppBootstrapProps) {
 
   useEffect(() => {
     let mounted = true;
+    let stopWatchingAppVersion: (() => void) | undefined;
 
     async function bootstrap() {
       const config = resolveAppConfig();
+
+      configureConsole({
+        isProductionRuntime:
+          config.runtime.console.suppressInProduction &&
+          config.app.environment === 'production',
+      });
 
       configureFetcher({
         onForbidden: config.fetcher.onForbidden,
         onUnauthorized: config.fetcher.onUnauthorized,
       });
 
-      await initializeAppVersion();
+      await checkAppVersionOnce(config);
       const nextPwaState = initializePwaManager();
+      stopWatchingAppVersion = watchAppVersion(config).stop;
 
       if (mounted) {
         setPwaState(nextPwaState);
@@ -43,6 +55,7 @@ export function AppBootstrap({ children }: AppBootstrapProps) {
 
     return () => {
       mounted = false;
+      stopWatchingAppVersion?.();
     };
   }, []);
 

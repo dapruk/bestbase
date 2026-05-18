@@ -16,6 +16,14 @@ export type AppAuthMode = 'cookie' | 'bearer' | 'hybrid';
 
 export type AppVersionMode = 'low' | 'mild' | 'aggressive';
 
+export type AppVersionWatchEvent =
+  | 'pageshow'
+  | 'visibilitychange'
+  | 'focus'
+  | 'online';
+
+export type AppVersionCleanupHook = () => void | Promise<void>;
+
 export type StatePersistenceAdapterName =
   | 'localStorage'
   | 'sessionStorage'
@@ -55,6 +63,31 @@ export interface AppConfig {
     mode: AppVersionMode;
     reloadOnChange: boolean;
     preserveLocalStorageKeys: string[];
+    localSuffix: string;
+    remote: {
+      enabled: boolean;
+      url: string;
+      cacheBustParam: string;
+      timeoutMs: number;
+    };
+    reload: {
+      queryKey: string;
+      sessionKey: string;
+      maxAttempts: number;
+    };
+    watch: {
+      enabled: boolean;
+      events: AppVersionWatchEvent[];
+    };
+    cleanupHooks?: {
+      beforeReset?: AppVersionCleanupHook | undefined;
+      afterReset?: AppVersionCleanupHook | undefined;
+    };
+  };
+  runtime: {
+    console: {
+      suppressInProduction: boolean;
+    };
   };
   pwa: {
     enabled: boolean;

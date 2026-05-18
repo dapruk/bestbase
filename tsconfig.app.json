@@ -20,7 +20,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "tsBuildInfoFile": "./node_modules/.cache/tsconfig.app.tsbuildinfo",
-    "ignoreDeprecations": "6.0",
+    "ignoreDeprecations": "5.0",
     "jsx": "react-jsx",
     "baseUrl": ".",
     "paths": {
