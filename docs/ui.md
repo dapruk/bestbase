@@ -1,30 +1,21 @@
 # UI
 
-Tailwind CSS dan shadcn/ui sudah termasuk dari awal untuk konsistensi base UI.
-Setup memakai npm, Vite, CSS variables, base color `neutral`, dan shadcn preset
-`radix-nova`.
+UI fase ini masih minimal. Bestbase belum memasang Tailwind, shadcn/ui, atau
+design system kompleks.
 
-Komponen shadcn hidup di:
+Komponen shared yang tersedia:
 
-```txt
-src/shared/components/ui
-```
+- `src/shared/components/feedback/empty-state.tsx`
+- `src/shared/components/feedback/error-state.tsx`
+- `src/shared/components/feedback/loading-state.tsx`
+- `src/shared/components/feedback/confirm-dialog.tsx`
+- `src/shared/components/data-display/data-table/*`
 
-Gunakan `cn()` dari:
+Prinsip:
 
-```ts
-import { cn } from '@/shared/utils/cn';
-```
+- komponen shared harus bebas domain
+- jangan letakkan API call di presentational component
+- jangan letakkan auth/permission logic di DataTable
+- feature container/store mengatur behavior
 
-Radix primitives diinstal melalui komponen shadcn yang membutuhkannya. Prefer
-komponen shadcn/ui untuk button, input, dialog, dropdown, table, badge, card,
-skeleton, separator, tooltip, dan sonner agar UI dasar tetap konsisten.
-
-Tambah komponen baru dengan CLI npm-compatible:
-
-```bash
-npx shadcn@latest add <component> --path src/shared/components/ui --yes
-```
-
-Jika CLI menulis path literal `@/...` di environment lokal, pindahkan file ke
-`src/shared/components/ui` dan pastikan import mengarah ke alias `@/shared/...`.
+Design system lengkap bisa ditambahkan pada fase berikutnya.

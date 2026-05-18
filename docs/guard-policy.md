@@ -1,41 +1,49 @@
 # Guard Policy
 
-Bestbase memakai guardap `1.2.0` sebagai authorization engine. Layer
-`core/guard` hanya membuat satu instance Guardap di
-`src/core/guard/guard.config.ts` dan adapter route tipis.
+Bestbase memakai guardap `1.2.0` sebagai authorization engine.
 
-Model Guardap yang dipakai:
+Folder `src/core/guard` hanya berisi integrasi tipis:
 
-- `createGuard(config)`
+- `guard.config.ts`: membuat instance guardap melalui `createGuard()`.
+- `RouteGuard.tsx`: adapter route TanStack yang memakai
+  `evaluateTanStackGuard` dari `guardap/drivers/tanstack`.
+- `guard.types.ts`: tipe route metadata yang mengikuti `GuardapRouteMeta`.
+- `guard.integration.test.ts`: test integrasi terhadap evaluator guardap.
+
+Bestbase tidak membuat:
+
+- custom authorization engine
+- `Can` wrapper lokal
+- `useCan` wrapper lokal
+- context guard buatan sendiri
+- permission-string parser
+- fallback permission check
+
+## Metadata Route
+
+Route guard memakai metadata guardap:
+
+```tsx
+<GuardedRoute meta={{ login: true, feature: 'dashboard', action: 'read' }}>
+  <DashboardPage />
+</GuardedRoute>
+```
+
+Metadata yang didukung mengikuti guardap:
+
+- `login`
+- `guest`
 - `role`
 - `group`
 - `condition`
 - `feature`
 - `action`
-- `login` / `guest`
-- `redirect`
+- `redirectTo`
 
-Gunakan helper React dari instance yang sama:
+## Policy
 
-```tsx
-import { AccessGuard } from '@/core/guard/guard.config';
+Policy permission tidak didefinisikan berat di basecode. Project downstream dapat
+mengganti konfigurasi `createAppGuard()` dengan `getPermissions`, `groups`,
+`resolveAction`, dan config guardap lain sesuai kebutuhan.
 
-<AccessGuard login feature="products" action="create">
-  <CreateProductButton />
-</AccessGuard>;
-```
-
-Direct checks memakai fluent API Guardap:
-
-```ts
-import { Guard } from '@/core/guard/guard.config';
-
-Guard.requireLogin().allowed();
-Guard.requireRole('admin').allowed();
-Guard.require('read').on('products').allowed();
-Guard.requireLogin().redirect('/login');
-```
-
-Bestbase tidak membuat custom `Can`, `useCan`, permission-string parser, policy
-string layer, resource ABAC engine, atau authorization engine lokal. Dokumentasi
-resmi: https://www.npmjs.com/package/guardap
+Dokumentasi resmi: https://www.npmjs.com/package/guardap

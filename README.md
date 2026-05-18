@@ -1,8 +1,9 @@
 # Bestbase
 
-Bestbase adalah basecode frontend internal berbasis Vite, React, TypeScript, npm,
-TanStack Query, RxJS, Zod, dan guardap. Fokus fase ini adalah fondasi reusable,
-bukan aplikasi contoh yang polished.
+Bestbase adalah basecode frontend internal berbasis Vite, React, TypeScript,
+npm, TanStack Router, TanStack Query, RxJS, Zod, dan guardap.
+
+Fase ini fokus pada fondasi reusable, bukan sample app yang polished.
 
 ## Menjalankan Project
 
@@ -26,136 +27,80 @@ nvm use
 
 ## Struktur
 
-- `src/core`: infrastruktur platform seperti config, fetcher, auth, guard,
-  query, versioning, PWA, state, dan RxJS utilities.
-- `src/features`: fitur/domain bisnis.
-- `src/shared`: komponen dan utilitas reusable yang bebas domain.
-- `src/pages`: composition layer untuk route.
-- `src/layouts`: layout aplikasi.
-- `src/router`: setup router dan adapter.
 - `src/app`: bootstrap dan provider aplikasi.
+- `src/core`: config, fetcher, auth, guard, query, RxJS, persistence,
+  versioning, dan PWA.
+- `src/router`: setup TanStack Router dan route guard adapter.
+- `src/pages`: composition layer minimal.
+- `src/layouts`: layout aplikasi.
+- `src/shared`: komponen reusable bebas domain.
+- `src/features`: fitur/domain bisnis.
 
-## Prinsip Pengembangan
+## Prinsip
 
 Komponen React dibuat dumb/presentational sebanyak mungkin. Business logic hidup
-di store, service, schema, guard, fetcher, persistence utility, atau pure utils.
-Gunakan store/container/view separation hanya saat behavior memang cukup berat.
+di store, service, schema, guardap config, fetcher, persistence utility, atau
+pure utils.
 
 RxJS dipakai sebagai headless state layer ringan, bukan BLoC besar. Test default
 menggunakan `.test.ts`; `.test.tsx` hanya untuk kasus render UI.
 
 ## Konfigurasi
 
-`app.config.ts` adalah pusat konfigurasi app, tetapi runtime tidak mengimpor file
-itu langsung. Gunakan `resolveAppConfig()` agar default dan override selalu
-tergabung konsisten.
-
-## Router Initialization
-
-Basecode mulai tipis dengan `router.mode: 'uninitialized'`. Pilih router sekali
-melalui local CLI:
-
-```bash
-npm run bbase -- init
-```
-
-Command ini memilih TanStack Router atau React Router, mengubah
-`app.config.ts`, membuat file router dan guard adapter yang sesuai, memilih
-rendering mode, dan menginstal dependency router yang dipilih saja. App code
-tetap memakai public import stabil:
-
-```ts
-import { AppRouter } from '@/router';
-```
-
-Jangan mencampur TanStack Router dan React Router dalam satu project kecuali
-sedang melakukan custom architecture secara sengaja.
-
-Router mode:
-
-- TanStack Router
-- React Router Framework Mode
-
-Rendering mode:
-
-- SPA / Client-side only
-- Server-side capable / SSR-ready
-
-Server-side capable mode means base components/utilities avoid unsafe
-browser-only assumptions. Full SSR deployment may still need additional
-router/framework setup depending on hosting.
+`app.config.ts` adalah pusat konfigurasi app. Runtime harus membaca config
+melalui `resolveAppConfig()`, bukan import langsung ke banyak tempat.
 
 ## Fetcher dan Query
 
-`baseFetcher` dipakai untuk endpoint auth/session yang tidak bergantung auth.
-`appFetcher` atau `api` dipakai untuk endpoint aplikasi. Fetcher tidak membuat
-cache data; server-state cache menjadi tanggung jawab TanStack Query.
+`baseFetcher` dipakai untuk endpoint tanpa dependency auth. `appFetcher` atau
+`api` dipakai untuk endpoint bisnis.
+
+Fetcher mendukung schema validation dengan Zod:
+
+- `responseSchema`
+- `querySchema`
+- `bodySchema`
+- `requestSchema`
+
+HTTP non-OK dilempar sebagai `ApiError`. Validasi schema dilempar sebagai
+`SchemaValidationError`. Fetcher tidak melakukan redirect/logout langsung;
+gunakan hook `onUnauthorized` dan `onForbidden`.
+
+TanStack Query memegang server-state cache. Fetcher tidak membuat cache sendiri.
 
 ## Auth dan Guardap
 
 Auth default adalah cookie-based session. Token sensitif tidak boleh disimpan di
 localStorage/sessionStorage.
 
-Guardap dikonfigurasi sekali di `src/core/guard/guard.config.ts` mengikuti API
-resmi `guardap@1.2.0`: `createGuard(config)`, role, group, condition, feature,
-action, login/guest, dan redirect. Gunakan `AccessGuard` dari
-`guardap/react` untuk conditional rendering dan fluent API `Guard` untuk direct
-checks. Bestbase tidak membuat wrapper `Can/useCan` atau authorization engine
-sendiri. Dokumentasi Guardap: https://www.npmjs.com/package/guardap
+Guard memakai guardap `1.2.0`. Folder `src/core/guard` hanya berisi instance
+guardap dan adapter route TanStack. Bestbase tidak membuat custom `Can`,
+`useCan`, permission parser, atau authorization engine sendiri.
 
-## UI, Utilities, dan Data Table
+## DataTable
 
-Tailwind CSS dan shadcn/ui tersedia dari awal. Komponen shadcn ada di
-`src/shared/components/ui`, dengan style `radix-nova`, base color `neutral`, CSS
-variables aktif, dan `cn()` di `src/shared/utils/cn.ts`.
+DataTable tersedia di:
 
-## Utilities
+```ts
+import { DataTable } from '@/shared/components/data-display/data-table';
+```
 
-Common utilities live in `src/shared/utils`. `AppImage` lives in
-`src/shared/components/data-display/app-image`.
-
-Before creating a new helper, check `docs/utilities.md`. Future AI agents should
-reuse existing utilities instead of recreating them.
-
-See [docs/utilities.md](docs/utilities.md).
-
-`BbaseDataTable` adalah wrapper default untuk list office di
-`src/shared/components/data-display/bbase-data-table`. Wrapper ini memakai DiceUI
-Data Table sebagai basis dan menjaga search, filter, sort, pagination, row
-actions, loading, empty, dan error state tetap controlled dari feature
-store/container. It reads `app.config.ts > dataTable.mode` by default
-(`server` for office/API-driven lists) and can be overridden per usage with
-`<BbaseDataTable mode="client" />`. Raw DiceUI tetap tersedia sebagai escape
-hatch advanced.
-
-List-view preset akan menjadi standar halaman list/detail/form:
-
-- `/product`
-- `/product/create`
-- `/product/:id`
-- `/product/:id/edit`
-
-Fase ini hanya menyediakan fondasi dan scaffold awal.
+DataTable controlled dan presentational. Feature store/container mengatur
+search, filter, sorting, pagination, API call, dan permission row action.
 
 ## Generator
 
 ```bash
-npm run bbase -- init
 npm run bbase -- gen feat product
 npm run bbase -- gen feat product --list-view
 npm run bbase -- gen component product-table --feature product
 npm run bbase -- gen store product-list --feature product
 ```
 
-Opsi penting: `--dry-run`, `--force`, `--route`, `--protected`, `--public`,
-`--permission`, `--store`, `--service`, `--schema`, `--test`, `--persist`.
-`bbase gen` membaca `app.config.ts > router.mode`; route/list-view generation
-akan meminta `npm run bbase -- init` lebih dulu jika router belum diinisialisasi.
+`--list-view` membuat scaffold dasar list/detail/form, bukan full CRUD polished.
 
-## Versioning dan PWA
+## Docs
 
-App version/cache busting dikontrol dari `app.config.ts` dengan mode `low`,
-`mild`, dan `aggressive`. Struktur PWA sudah siap melalui manifest dan manager,
-tetapi belum offline-first secara agresif.
+Mulai dari [docs/README.md](docs/README.md).
 
 Samples/examples akan ditambahkan setelah fondasi core basecode selesai.

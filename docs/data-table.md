@@ -1,60 +1,51 @@
-# Data Table
+# DataTable
 
-`BbaseDataTable` adalah wrapper office-friendly di atas DiceUI Data Table.
-Dokumentasi DiceUI: https://www.diceui.com/docs/components/radix/data-table
+DataTable saat ini tersedia di:
 
-Raw DiceUI/TanStack setup tetap tersedia untuk kebutuhan advanced, tetapi default
-fitur list sebaiknya memakai:
-
-```tsx
-import { BbaseDataTable } from '@/shared/components/data-display/bbase-data-table';
+```ts
+import { DataTable } from '@/shared/components/data-display/data-table';
 ```
 
-`BbaseDataTable` menyederhanakan wiring yang biasanya berulang: search, filter,
-sorting, pagination, row actions, loading, empty, dan error state. Komponen ini
-tidak memanggil API, tidak membaca permission, dan tidak menyimpan business
+Komponen ini controlled dan presentational. Ia tidak melakukan API call, tidak
+menghitung permission, tidak membaca auth state, dan tidak menyimpan business
 logic.
 
-Default mode dibaca dari `app.config.ts > dataTable.mode`.
+## Tanggung Jawab DataTable
 
-```ts
-dataTable: {
-  mode: 'server',
-}
-```
+- render search input
+- render filter select
+- render sorting trigger
+- render pagination controls
+- render loading skeleton
+- render empty/error state
+- render row actions
+- emit callback perubahan state
 
-`server` adalah default untuk office list pages: API/query dan feature store
-mengontrol filtering, sorting, dan pagination. `client` bisa dipakai untuk data
-kecil yang sudah loaded penuh.
+## Tanggung Jawab Feature
 
-Per usage bisa override:
+Feature store/container bertanggung jawab untuk:
 
-```tsx
-<BbaseDataTable mode="client" />
-```
+- menyimpan search/filter/sort/pagination
+- memanggil API melalui service/fetcher
+- mengatur TanStack Query
+- memetakan params API
+- menghitung permission row action bila dibutuhkan
+- mengirim data dan state ke DataTable
 
-Jangan campur dengan `router.rendering`. `router.rendering` mengatur SPA vs
-server-capable runtime behavior; `dataTable.mode` mengatur operasi data table
-server-side vs client-side.
+## Types
 
-Pattern server-side list view:
+Types utama:
 
-- state search/filter/sort/pagination hidup di feature store
-- query dan mapping params hidup di container
-- column definition hidup di feature component folder
-- row actions difilter oleh container sesuai kebutuhan fitur
-- API params memakai `page = pageIndex + 1` dan `limit = pageSize`
-- sorting pertama dimap ke `sort` dan `order`
+- `DataTablePaginationState`
+- `DataTableSortingState`
+- `DataTableFilterState`
+- `DataTableState`
+- `DataTableColumn`
+- `DataTableRowAction`
+- `DataTableFilterConfig`
 
-Helper yang tersedia:
+## List View
 
-```ts
-toApiPaginationParams(state.pagination);
-toApiSortingParams(state.sorting);
-createInitialTableState();
-resetTablePage(state);
-```
-
-Generator `bbase --list-view` membuat scaffold yang memakai
-`BbaseDataTable`, menyimpan table state di `*-list.store.ts`, dan menambahkan
-headless test untuk behavior state dasar.
+`npm run bbase -- gen feat product --list-view` membuat scaffold dasar
+list/detail/form, tetapi belum membuat UI CRUD polished. Route/nav integration
+masih fase berikutnya.
