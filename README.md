@@ -19,7 +19,7 @@ npm run lint:fix
 npm run format
 ```
 
-Gunakan Node dari `.nvmrc`:
+Gunakan Node LTS dari `.nvmrc`:
 
 ```bash
 nvm use
