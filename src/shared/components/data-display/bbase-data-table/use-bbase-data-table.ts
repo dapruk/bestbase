@@ -10,7 +10,7 @@ import { MoreHorizontal } from 'lucide-react';
 import { createElement } from 'react';
 
 import { resolveAppConfig } from '@/core/config/resolve-app-config';
-import { Button } from '@/shared/components/ui/button';
+import { BaseButton } from '@/shared/components/button';
 
 import { BbaseDataTableActions } from './bbase-data-table.actions';
 import type { BbaseDataTableProps } from './bbase-data-table.types';
@@ -42,7 +42,7 @@ export function useBbaseDataTable<TRow, TValue = unknown>({
                 actions: rowActions,
                 row: row.original,
                 children: createElement(
-                  Button,
+                  BaseButton,
                   {
                     'aria-label': 'Open row actions',
                     size: 'icon',
