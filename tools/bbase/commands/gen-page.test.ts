@@ -35,6 +35,25 @@ describe('genPage', () => {
     expect(content).toContain('Recent activity');
   });
 
+  it('creates auth page templates', () => {
+    silenceLogs();
+    const fixture = createBbaseCliFixture();
+
+    withFixtureCwd(fixture, () => {
+      genPage({ name: 'auth', template: 'auth' });
+    });
+
+    expect(fixture.read('src/pages/login/LoginPage.tsx')).toContain(
+      'export function LoginPage()'
+    );
+    expect(fixture.read('src/pages/register/RegisterPage.tsx')).toContain(
+      'export function RegisterPage()'
+    );
+    expect(
+      fixture.read('src/pages/forgot-password/ForgotPasswordPage.tsx')
+    ).toContain('export function ForgotPasswordPage()');
+  });
+
   it('rejects unknown page templates', () => {
     silenceLogs();
     const fixture = createBbaseCliFixture();

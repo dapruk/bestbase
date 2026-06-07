@@ -19,6 +19,7 @@ function printHelp() {
   logInfo(
     `bestbase local CLI\n\nCommands:\n  npm run bbase -- gen feat {name}\n  npm run bbase -- gen component {name} --feature {feature}\n  npm run bbase -- gen store {name} --feature {feature}\n` +
       `  npm run bbase -- gen page dashboard --dashboard-page\n` +
+      `  npm run bbase -- gen page auth --auth-pages\n` +
       `  npm run bbase -- init\n`
   );
 }
@@ -109,7 +110,11 @@ if (command === 'page') {
   genPage({
     ...common,
     name,
-    template: hasFlag(args, '--dashboard-page') ? 'dashboard' : undefined,
+    template: hasFlag(args, '--dashboard-page')
+      ? 'dashboard'
+      : hasFlag(args, '--auth-pages')
+        ? 'auth'
+        : undefined,
   });
   process.exit(process.exitCode ?? 0);
 }

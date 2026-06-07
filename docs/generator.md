@@ -14,6 +14,7 @@ npm run bbase -- gen feat product --list-view
 npm run bbase -- gen component product-table --feature product
 npm run bbase -- gen store product-list --feature product
 npm run bbase -- gen page dashboard --dashboard-page
+npm run bbase -- gen page auth --auth-pages
 ```
 
 ## Feature
@@ -99,6 +100,22 @@ Membuat halaman dashboard siap edit:
 Template ini presentational. State client tetap di RxJS store/container,
 server-state tetap di TanStack Query, dan IO tetap lewat service/fetcher.
 
+## Auth Pages
+
+```bash
+npm run bbase -- gen page auth --auth-pages
+```
+
+Membuat template:
+
+- `src/pages/login/LoginPage.tsx`
+- `src/pages/register/RegisterPage.tsx`
+- `src/pages/forgot-password/ForgotPasswordPage.tsx`
+
+Template auth memakai `BaseButton`, `Card`, `Input`, dan `Label`. Form tetap
+tipis agar project downstream bisa menghubungkan auth service/backend sesuai
+kebutuhan.
+
 ## Opsi
 
 Opsi yang sudah dikenali parser:
@@ -118,5 +135,6 @@ Opsi yang sudah dikenali parser:
 - `--persist`
 - `--list-view`
 - `--dashboard-page`
+- `--auth-pages`
 
 Beberapa opsi route/nav masih scaffold-only pada fase ini.
