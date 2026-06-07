@@ -1,23 +1,35 @@
 # Utilities
 
-Fase ini belum membuat katalog utility besar. Utility utama yang sudah ada
-berada di `src/core`, bukan `src/shared/utils`.
+Utility domain-free berada di `src/shared/utils`. File ini menjadi katalog agar
+developer dan AI agent tidak membuat helper baru yang sudah tersedia.
 
 Yang tersedia saat ini:
 
-- `src/core/rx/create-store.ts`
-- `src/core/rx/use-observable-state.ts`
-- `src/core/state/persistence/*`
-- `src/core/http/fetcher.ts`
-- `src/core/version/*`
+- `array.ts`
+- `async.ts`
+- `cn.ts`
+- `device.ts`
+- `error.ts`
+- `format-currency.ts`
+- `format-date.ts`
+- `format-file-size.ts`
+- `format-number.ts`
+- `image-url.ts`
+- `object.ts`
+- `string.ts`
+- `url.ts`
+- `index.ts`
 
 Aturan penambahan utility:
 
-- utility domain-free masuk ke `src/shared` atau `src/core` sesuai tanggung
-  jawabnya
+- utility domain-free masuk ke `src/shared/utils`
+- utility platform/core masuk ke `src/core`
 - utility domain-specific masuk ke `src/features/{feature}/utils`
 - hindari helper baru jika logic masih sederhana
 - tambahkan test headless `.test.ts` untuk utility yang punya behavior penting
 
-Jika nanti `src/shared/utils` dibuat, dokumentasikan exports dan contoh
-penggunaannya di file ini.
+## Instruction for Future AI Agents
+
+Sebelum membuat helper baru, cek `src/shared/utils/index.ts` dan file ini.
+Gunakan helper yang sudah ada jika behavior cocok. Jika helper baru memang
+dibutuhkan, tambahkan export, test, dan update katalog ini di commit yang sama.

@@ -87,19 +87,20 @@ TanStack Query memegang server-state cache. Fetcher tidak membuat cache sendiri.
 Auth default adalah cookie-based session. Token sensitif tidak boleh disimpan di
 localStorage/sessionStorage.
 
-Guard memakai guardap `1.2.0`. Folder `src/core/guard` hanya berisi instance
-guardap dan adapter route TanStack. Bestbase tidak membuat custom `Can`,
-`useCan`, permission parser, atau authorization engine sendiri.
+Guard memakai guardap latest; lockfile saat ini resolve ke `1.3.0`. Folder
+`src/core/guard` hanya berisi instance guardap dan adapter route TanStack.
+Bestbase tidak membuat custom `Can`, `useCan`, permission parser, atau
+authorization engine sendiri.
 
 ## DataTable
 
-DataTable tersedia di:
+BbaseDataTable tersedia di:
 
 ```ts
-import { DataTable } from '@/shared/components/data-display/data-table';
+import { BbaseDataTable } from '@/shared/components/data-display/bbase-data-table';
 ```
 
-DataTable controlled dan presentational. Feature store/container mengatur
+BbaseDataTable controlled dan presentational. Feature store/container mengatur
 search, filter, sorting, pagination, API call, dan permission row action.
 
 ## Generator

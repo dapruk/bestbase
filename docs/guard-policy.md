@@ -1,12 +1,14 @@
 # Guard Policy
 
-Bestbase memakai guardap `1.2.0` sebagai authorization engine.
+Bestbase memakai guardap latest sebagai authorization engine. Lockfile saat ini
+resolve ke `1.3.0`, dan dependency sengaja memakai `latest` karena guardap juga
+paket internal yang harus selalu didukung pada versi terbaru.
 
 Folder `src/core/guard` hanya berisi integrasi tipis:
 
 - `guard.config.ts`: membuat instance guardap melalui `createGuard()`.
-- `RouteGuard.tsx`: adapter route TanStack yang memakai
-  `evaluateTanStackGuard` dari `guardap/drivers/tanstack`.
+- route guard adapter memakai evaluator/router driver guardap, sesuai router
+  aktif.
 - `guard.types.ts`: tipe route metadata yang mengikuti `GuardapRouteMeta`.
 - `guard.integration.test.ts`: test integrasi terhadap evaluator guardap.
 

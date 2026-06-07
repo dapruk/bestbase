@@ -1,16 +1,16 @@
-# DataTable
+# BbaseDataTable
 
-DataTable saat ini tersedia di:
+BbaseDataTable saat ini tersedia di:
 
 ```ts
-import { DataTable } from '@/shared/components/data-display/data-table';
+import { BbaseDataTable } from '@/shared/components/data-display/bbase-data-table';
 ```
 
 Komponen ini controlled dan presentational. Ia tidak melakukan API call, tidak
 menghitung permission, tidak membaca auth state, dan tidak menyimpan business
 logic.
 
-## Tanggung Jawab DataTable
+## Tanggung Jawab BbaseDataTable
 
 - render search input
 - render filter select
@@ -36,13 +36,13 @@ Feature store/container bertanggung jawab untuk:
 
 Types utama:
 
-- `DataTablePaginationState`
-- `DataTableSortingState`
-- `DataTableFilterState`
-- `DataTableState`
-- `DataTableColumn`
-- `DataTableRowAction`
-- `DataTableFilterConfig`
+- `BbaseDataTablePaginationState`
+- `BbaseDataTableSortingState`
+- `BbaseDataTableState`
+- `BbaseDataTableRowAction`
+- `BbaseDataTableFilterConfig`
+- `BbaseDataTableSearchConfig`
+- `BbaseDataTableMode`
 
 ## List View
 

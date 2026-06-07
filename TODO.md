@@ -1,5 +1,10 @@
 # TODO
 
+## Implementation Plan
+
+- Jalankan fase di `IMPLEMENTATION-PLAN.md` untuk hardening CLI, strategi update
+  downstream repo, dan sinkronisasi Guardap latest. Jangan buat demo app.
+
 ## Deployment
 
 - Tentukan strategi deploy untuk kapan `versioning.remote.enabled` aktif.
