@@ -18,7 +18,7 @@ Prinsip:
 
 - komponen shared harus bebas domain
 - jangan letakkan API call di presentational component
-- jangan letakkan auth/permission logic di DataTable
+- jangan letakkan auth/permission logic di BbaseDataTable
 - feature container/store mengatur behavior
 - ikuti prinsip state basebranch: component presentational, container mengatur
   flow, RxJS store untuk client state, TanStack Query untuk server state

@@ -10,7 +10,7 @@ fitur yang belum ada di repository.
 - [fetcher.md](fetcher.md): fetcher, schema validation, dan error handling.
 - [auth-lifecycle.md](auth-lifecycle.md): state auth dan lifecycle session.
 - [guard-policy.md](guard-policy.md): integrasi guardap-only.
-- [data-table.md](data-table.md): DataTable controlled/presentational.
+- [data-table.md](data-table.md): BbaseDataTable controlled/presentational.
 - [state-persistence.md](state-persistence.md): persistence adapters.
 - [app-versioning.md](app-versioning.md): version/cache busting.
 - [pwa.md](pwa.md): struktur PWA-ready.

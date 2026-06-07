@@ -30,7 +30,7 @@ Feature store/container bertanggung jawab untuk:
 - mengatur TanStack Query
 - memetakan params API
 - menghitung permission row action bila dibutuhkan
-- mengirim data dan state ke DataTable
+- mengirim data dan state ke BbaseDataTable
 
 ## Types
 

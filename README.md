@@ -92,7 +92,7 @@ Guard memakai guardap latest; lockfile saat ini resolve ke `1.3.0`. Folder
 Bestbase tidak membuat custom `Can`, `useCan`, permission parser, atau
 authorization engine sendiri.
 
-## DataTable
+## BbaseDataTable
 
 BbaseDataTable tersedia di:
 

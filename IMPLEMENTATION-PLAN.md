@@ -182,7 +182,7 @@ changes.
 
 1. Update Guardap dependency to latest and sync lockfile.
 2. Sync Guardap docs/version wording.
-3. Sync DataTable docs to `BbaseDataTable`.
+3. Sync BbaseDataTable docs to canonical naming.
 4. Sync UI and utilities docs to current repo state.
 5. Add this implementation plan.
 6. Add CLI test harness with one smoke test for help output.
@@ -224,7 +224,7 @@ changes.
 - Creating demo pages or polished sample CRUD.
 - Building a custom authorization engine.
 - Replacing Guardap helpers with local wrappers.
-- Making DataTable perform API calls or permission decisions.
+- Making BbaseDataTable perform API calls or permission decisions.
 - Generating dashboards tied to fake business domains.
 - Solving downstream business-domain architecture.
 - Publishing app template as npm package before CLI update flow is proven.
