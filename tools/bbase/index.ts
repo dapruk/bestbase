@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { genComponent } from './commands/gen-component';
 import { genFeature } from './commands/gen-feature';
+import { genPage } from './commands/gen-page';
 import { genStore } from './commands/gen-store';
 import { initProject } from './commands/init';
 import { logError, logInfo } from './utils/logger';
@@ -17,6 +18,7 @@ function getOption(args: string[], name: string): string | undefined {
 function printHelp() {
   logInfo(
     `bestbase local CLI\n\nCommands:\n  npm run bbase -- gen feat {name}\n  npm run bbase -- gen component {name} --feature {feature}\n  npm run bbase -- gen store {name} --feature {feature}\n` +
+      `  npm run bbase -- gen page dashboard --dashboard-page\n` +
       `  npm run bbase -- init\n`
   );
 }
@@ -101,6 +103,15 @@ if (command === 'store') {
 
   genStore({ ...common, feature, name });
   process.exit(0);
+}
+
+if (command === 'page') {
+  genPage({
+    ...common,
+    name,
+    template: hasFlag(args, '--dashboard-page') ? 'dashboard' : undefined,
+  });
+  process.exit(process.exitCode ?? 0);
 }
 
 logError(`Command gen ${command} belum tersedia.`);

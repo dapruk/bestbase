@@ -1,9 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
-import {
-  createBbaseCliFixture,
-  withFixtureCwd,
-} from '../testing/fixture';
+import { createBbaseCliFixture, withFixtureCwd } from '../testing/fixture';
 import { genFeature } from './gen-feature';
 
 function silenceLogs() {
@@ -55,7 +52,10 @@ describe('genFeature', () => {
 
     withFixtureCwd(fixture, () => {
       genFeature({ name: 'product' });
-      fixture.write('src/features/product/index.ts', 'export const kept = true;\n');
+      fixture.write(
+        'src/features/product/index.ts',
+        'export const kept = true;\n'
+      );
 
       genFeature({ name: 'product' });
     });
@@ -80,7 +80,9 @@ describe('genFeature', () => {
     });
 
     expect(
-      fixture.exists('src/features/product/containers/product-list.container.tsx')
+      fixture.exists(
+        'src/features/product/containers/product-list.container.tsx'
+      )
     ).toBe(true);
     expect(
       fixture
