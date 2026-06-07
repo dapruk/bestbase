@@ -11,6 +11,7 @@ Komponen shared yang tersedia:
 - `src/shared/components/feedback/loading-state.tsx`
 - `src/shared/components/feedback/confirm-dialog.tsx`
 - `src/shared/components/data-display/bbase-data-table/*`
+- `src/shared/components/layout/pane-layout.tsx`
 - `src/shared/components/ui/*`
 
 Prinsip:
@@ -19,6 +20,10 @@ Prinsip:
 - jangan letakkan API call di presentational component
 - jangan letakkan auth/permission logic di DataTable
 - feature container/store mengatur behavior
+- ikuti prinsip state basebranch: component presentational, container mengatur
+  flow, RxJS store untuk client state, TanStack Query untuk server state
+- gunakan `PaneLayout` untuk template dashboard atau halaman yang butuh komposisi
+  panel responsif
 
 Tambah komponen shadcn baru dengan pola official Vite setup, lalu simpan hasil
 ke `src/shared/components/ui`.

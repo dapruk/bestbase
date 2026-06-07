@@ -26,4 +26,5 @@
 ## Samples
 
 - Buat sample feature setelah fondasi basecode stabil.
-- Buat contoh list/detail/form yang memakai DataTable dan generator `--list-view`.
+- Buat template list/dashboard/auth yang memakai BbaseDataTable dan layout
+  primitive, tanpa demo app.

@@ -12,6 +12,8 @@ used as base code for downstream repos:
 - CLI generation is still hard to update safely because templates are embedded
   in command files.
 - CLI has no tests, so generated file structure can regress silently.
+- Page templates stop at list pages; auth and dashboard templates are still
+  missing or too minimal for downstream teams to edit productively.
 - Config updates rely on regex replacement against `app.config.ts`.
 - Generated route index files can be overwritten instead of merged.
 - Guardap should track latest because Guardap is an owned package, and Bestbase
@@ -69,8 +71,31 @@ changes.
 ## Phase 3: Improve Generated File Structures
 
 - Keep `gen feat` folder structure as current canonical feature shape.
+- Add page template generation:
+  - `--auth-pages`: login, register, forgot password, and optional reset
+    password.
+  - `--list-page`: usable BbaseDataTable page variants.
+  - `--dashboard-page`: KPI cards, chart panels, activity list, and layout
+    sections ready to edit.
 - Make `--list-view` generate a thin BbaseDataTable list flow only:
   container/store/service/schema/types/pages/columns/mapper/test.
+- Add list page variants:
+  `basic`, `crud`, `filterable`, `readonly`, and `picker`.
+- Make dashboard page variants:
+  `overview`, `operations`, `analytics`, and `executive`.
+- Dashboard templates should use placeholder data and typed view models, but no
+  fake backend or demo domain.
+- Dashboard output should include KPI card data, simple chart data shape,
+  quick-action area, recent activity area, and empty/loading/error-ready slots.
+- Generated page components must follow the basebranch state-management
+  principle: components stay presentational, feature containers orchestrate UI
+  state, RxJS stores hold client state, TanStack Query holds server state, and
+  services/fetcher perform IO.
+- Add reusable layout primitives under `src/shared/components/layout`.
+- Add `PaneLayout` as the first layout primitive, but port it with safe styling:
+  use `cn()` from `src/shared/utils/cn.ts`, avoid dynamic Tailwind classes such
+  as `gap-${gap}` and `w-[${value}]`, and prefer CSS variables or inline style
+  for dynamic gap/width.
 - Do not generate polished CRUD/demo screens.
 - Add explicit generated comments only where downstream owners need to know
   whether files are safe to edit.
@@ -164,20 +189,25 @@ changes.
 7. Add CLI fixture helpers for temp repo generation.
 8. Add tests for `gen feat` base folder structure.
 9. Add tests for `gen feat --list-view`.
-10. Add tests for overwrite protection and `--force`.
-11. Extract generator write planning into shared `PlanWrite`.
-12. Move feature templates into template modules.
-13. Move router templates into template modules.
-14. Replace route index overwrite with merge behavior.
-15. Add `bbase doctor` read-only checks.
-16. Add `.bestbase/manifest.json` writer during `bbase init`.
-17. Replace config regex updates with tested config update helpers.
-18. Add Guardap 1.3 typed redirect/router integration where router mode is
+10. Add `PaneLayout` shared layout primitive.
+11. Add tests for `PaneLayout` sizing and class behavior.
+12. Add `--auth-pages` templates.
+13. Add `--list-page` variant templates.
+14. Add `--dashboard-page` variant templates.
+15. Add tests for overwrite protection and `--force`.
+16. Extract generator write planning into shared `PlanWrite`.
+17. Move feature templates into template modules.
+18. Move router templates into template modules.
+19. Replace route index overwrite with merge behavior.
+20. Add `bbase doctor` read-only checks.
+21. Add `.bestbase/manifest.json` writer during `bbase init`.
+22. Replace config regex updates with tested config update helpers.
+23. Add Guardap 1.3 typed redirect/router integration where router mode is
     mature enough.
-19. Add CLI package build metadata and `bin`.
-20. Add CLI pack smoke test.
-21. Add `bbase upgrade --dry-run`.
-22. Add first guarded `bbase upgrade --apply` migration.
+24. Add CLI package build metadata and `bin`.
+25. Add CLI pack smoke test.
+26. Add `bbase upgrade --dry-run`.
+27. Add first guarded `bbase upgrade --apply` migration.
 
 ## Testing Decisions
 
@@ -195,5 +225,6 @@ changes.
 - Building a custom authorization engine.
 - Replacing Guardap helpers with local wrappers.
 - Making DataTable perform API calls or permission decisions.
+- Generating dashboards tied to fake business domains.
 - Solving downstream business-domain architecture.
 - Publishing app template as npm package before CLI update flow is proven.
